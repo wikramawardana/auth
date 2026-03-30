@@ -1,65 +1,42 @@
-import Image from "next/image";
+import { Shield } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+export default function HomePage() {
+	return (
+		<div className="min-h-screen w-full flex items-center justify-center p-4">
+			<div className="absolute top-10 left-10 w-20 h-20 bg-blue-400 border-4 border-black dark:border-white rotate-12 hidden md:block" />
+			<div className="absolute top-32 right-20 w-16 h-16 bg-yellow-400 border-4 border-black dark:border-white -rotate-12 hidden md:block" />
+			<div className="absolute bottom-20 left-20 w-24 h-24 bg-pink-400 border-4 border-black dark:border-white rotate-45 hidden md:block" />
+			<div className="absolute bottom-32 right-32 w-12 h-12 bg-green-400 border-4 border-black dark:border-white -rotate-6 hidden md:block" />
+
+			<div className="neo-brutal neo-brutal-white p-12 text-center max-w-lg">
+				<div className="mx-auto flex items-center justify-center w-20 h-20 bg-blue-400 border-4 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] mb-6">
+					<Shield className="w-12 h-12 text-black" />
+				</div>
+				<h1 className="text-4xl font-black tracking-tight text-black dark:text-white mb-3">
+					Wikra Auth
+				</h1>
+				<p className="text-base font-medium text-black/60 dark:text-white/60 mb-8">
+					Centralized authentication service. Manage users, roles, and
+					OAuth clients from a single dashboard.
+				</p>
+				<div className="flex gap-3 justify-center">
+					<Button
+						asChild
+						className="h-12 px-8 text-base font-bold bg-blue-500 dark:bg-blue-600 text-white border-4 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] neo-brutal-hover"
+					>
+						<Link href="/login">Sign In</Link>
+					</Button>
+					<Button
+						variant="outline"
+						asChild
+						className="h-12 px-8 text-base font-bold bg-yellow-400 dark:bg-yellow-500 text-black border-4 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] neo-brutal-hover"
+					>
+						<Link href="/dashboard">Dashboard</Link>
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
 }
