@@ -18,8 +18,8 @@ export default function HomePage() {
 					Wikra Auth
 				</h1>
 				<p className="text-base font-medium text-black/60 dark:text-white/60 mb-8">
-					Centralized authentication service. Manage users, roles, and
-					OAuth clients from a single dashboard.
+					Centralized authentication service. Manage users, roles, and OAuth
+					clients from a single dashboard.
 				</p>
 				<div className="flex gap-3 justify-center">
 					<Button

@@ -71,9 +71,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 			<div
 				className={cn(
 					"grid h-screen grid-rows-[4rem_1fr] transition-all duration-300",
-					collapsed
-						? "grid-cols-[60px_1fr]"
-						: "grid-cols-[256px_1fr]",
+					collapsed ? "grid-cols-[60px_1fr]" : "grid-cols-[256px_1fr]",
 				)}
 			>
 				{/* Sidebar header */}
@@ -123,9 +121,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 						orientation="vertical"
 						className="mr-2 h-6 w-[3px] bg-black"
 					/>
-					<h2 className="text-sm font-black text-black">
-						{currentPage.title}
-					</h2>
+					<h2 className="text-sm font-black text-black">{currentPage.title}</h2>
 					<div className="ml-auto">
 						<UserMenu />
 					</div>
@@ -167,9 +163,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 									return (
 										<Tooltip key={item.href}>
 											<TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-											<TooltipContent side="right">
-												{item.title}
-											</TooltipContent>
+											<TooltipContent side="right">{item.title}</TooltipContent>
 										</Tooltip>
 									);
 								}

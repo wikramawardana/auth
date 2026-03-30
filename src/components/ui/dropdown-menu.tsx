@@ -180,17 +180,17 @@ function DropdownMenuShortcut({
 
 export {
 	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuItem,
 	DropdownMenuCheckboxItem,
-	DropdownMenuRadioItem,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
 	DropdownMenuLabel,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
 	DropdownMenuSeparator,
 	DropdownMenuShortcut,
-	DropdownMenuGroup,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
-	DropdownMenuRadioGroup,
+	DropdownMenuTrigger,
 };

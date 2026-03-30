@@ -1,6 +1,12 @@
 "use client";
 
-import { Ban, MoreHorizontal, Search, ShieldCheck, UserCog } from "lucide-react";
+import {
+	Ban,
+	MoreHorizontal,
+	Search,
+	ShieldCheck,
+	UserCog,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -130,28 +136,30 @@ export default function UsersPage() {
 
 	return (
 		<>
-		<Card className="neo-brutal neo-brutal-white">
-			<CardHeader>
-				<div className="flex items-center justify-between">
-					<div>
-						<CardTitle className="text-2xl font-black text-black">Users</CardTitle>
-						<CardDescription className="font-medium text-black/60">
-							Manage user accounts, roles, and access.
-							{" "}{users.length} user{users.length !== 1 ? "s" : ""} found
-						</CardDescription>
+			<Card className="neo-brutal neo-brutal-white">
+				<CardHeader>
+					<div className="flex items-center justify-between">
+						<div>
+							<CardTitle className="text-2xl font-black text-black">
+								Users
+							</CardTitle>
+							<CardDescription className="font-medium text-black/60">
+								Manage user accounts, roles, and access. {users.length} user
+								{users.length !== 1 ? "s" : ""} found
+							</CardDescription>
+						</div>
+						<div className="relative w-64">
+							<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-black/40" />
+							<Input
+								placeholder="Search by email..."
+								className="pl-8 border-2 border-black font-medium"
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+							/>
+						</div>
 					</div>
-					<div className="relative w-64">
-						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-black/40" />
-						<Input
-							placeholder="Search by email..."
-							className="pl-8 border-2 border-black font-medium"
-							value={search}
-							onChange={(e) => setSearch(e.target.value)}
-						/>
-					</div>
-				</div>
-			</CardHeader>
-			<CardContent>
+				</CardHeader>
+				<CardContent>
 					{loading ? (
 						<div className="flex justify-center py-8">
 							<div className="h-6 w-6 border-4 border-black border-t-transparent rounded-full animate-spin" />
@@ -234,9 +242,7 @@ export default function UsersPage() {
 												<DropdownMenuItem
 													onClick={() => setBanDialog(user)}
 													className={`font-bold ${
-														user.banned
-															? "text-green-600"
-															: "text-destructive"
+														user.banned ? "text-green-600" : "text-destructive"
 													}`}
 												>
 													{user.banned ? (
@@ -258,8 +264,8 @@ export default function UsersPage() {
 							))}
 						</div>
 					)}
-			</CardContent>
-		</Card>
+				</CardContent>
+			</Card>
 
 			<Dialog open={!!roleDialog} onOpenChange={() => setRoleDialog(null)}>
 				<DialogContent className="neo-brutal neo-brutal-white">

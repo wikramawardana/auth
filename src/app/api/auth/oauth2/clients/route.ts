@@ -1,5 +1,5 @@
-import { Pool } from "pg";
 import { type NextRequest, NextResponse } from "next/server";
+import { Pool } from "pg";
 import { getServerSession } from "@/lib/auth-server";
 
 const pool = new Pool({
@@ -32,14 +32,22 @@ export async function DELETE(request: NextRequest) {
 
 	const { clientId } = await request.json();
 	if (!clientId) {
-		return NextResponse.json({ error: "clientId is required" }, { status: 400 });
+		return NextResponse.json(
+			{ error: "clientId is required" },
+			{ status: 400 },
+		);
 	}
 
 	try {
-		await pool.query('DELETE FROM "oauthApplication" WHERE "clientId" = $1', [clientId]);
+		await pool.query('DELETE FROM "oauthApplication" WHERE "clientId" = $1', [
+			clientId,
+		]);
 		return NextResponse.json({ success: true });
 	} catch {
-		return NextResponse.json({ error: "Failed to delete client" }, { status: 500 });
+		return NextResponse.json(
+			{ error: "Failed to delete client" },
+			{ status: 500 },
+		);
 	}
 }
 
@@ -52,7 +60,10 @@ export async function PATCH(request: NextRequest) {
 
 	const { clientId, name, redirectUri } = await request.json();
 	if (!clientId) {
-		return NextResponse.json({ error: "clientId is required" }, { status: 400 });
+		return NextResponse.json(
+			{ error: "clientId is required" },
+			{ status: 400 },
+		);
 	}
 
 	try {
@@ -62,6 +73,9 @@ export async function PATCH(request: NextRequest) {
 		);
 		return NextResponse.json({ success: true });
 	} catch {
-		return NextResponse.json({ error: "Failed to update client" }, { status: 500 });
+		return NextResponse.json(
+			{ error: "Failed to update client" },
+			{ status: 500 },
+		);
 	}
 }

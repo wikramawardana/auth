@@ -1,5 +1,5 @@
-import { Pool } from "pg";
 import { NextResponse } from "next/server";
+import { Pool } from "pg";
 import { getServerSession } from "@/lib/auth-server";
 
 const pool = new Pool({
@@ -39,9 +39,7 @@ export async function GET() {
 
 		const activeSessions = sessions.filter((s) => s.isActive);
 
-		const uniqueActiveUsers = new Set(
-			activeSessions.map((s) => s.userId),
-		).size;
+		const uniqueActiveUsers = new Set(activeSessions.map((s) => s.userId)).size;
 
 		return NextResponse.json({
 			sessions,

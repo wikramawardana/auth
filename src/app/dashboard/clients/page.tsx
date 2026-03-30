@@ -1,17 +1,16 @@
 "use client";
 
-import { AppWindow, Copy, Eye, EyeOff, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+	AppWindow,
+	Copy,
+	Eye,
+	EyeOff,
+	Pencil,
+	Plus,
+	Trash2,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -22,6 +21,15 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
@@ -205,170 +213,178 @@ export default function ClientsPage() {
 
 	return (
 		<>
-		<Card className="neo-brutal neo-brutal-white">
-			<CardHeader>
-				<div className="flex items-center justify-between">
-					<div>
-						<CardTitle className="text-2xl font-black text-black">
-							OAuth Clients
-						</CardTitle>
-						<CardDescription className="font-medium text-black/60">
-							Manage registered applications that can use Wikra Auth.
-						</CardDescription>
-					</div>
-					<Button
-						onClick={() => setShowDialog(true)}
-						className="font-bold bg-blue-500 text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] neo-brutal-hover"
-					>
-						<Plus className="h-4 w-4 mr-2" />
-						Register Client
-					</Button>
-				</div>
-			</CardHeader>
-			<CardContent className="space-y-4">
-			{loading ? (
-				<div className="flex justify-center py-12">
-					<div className="h-6 w-6 border-4 border-black dark:border-white border-t-transparent rounded-full animate-spin" />
-				</div>
-			) : clients.length === 0 ? (
-				<Card className="neo-brutal neo-brutal-white">
-					<CardContent className="flex flex-col items-center justify-center py-12 text-center">
-						<div className="flex h-16 w-16 items-center justify-center bg-blue-200 border-4 border-black dark:border-white mb-4">
-							<AppWindow className="h-8 w-8 text-black" />
+			<Card className="neo-brutal neo-brutal-white">
+				<CardHeader>
+					<div className="flex items-center justify-between">
+						<div>
+							<CardTitle className="text-2xl font-black text-black">
+								OAuth Clients
+							</CardTitle>
+							<CardDescription className="font-medium text-black/60">
+								Manage registered applications that can use Wikra Auth.
+							</CardDescription>
 						</div>
-						<h3 className="text-lg font-black text-black dark:text-white">
-							No clients registered
-						</h3>
-						<p className="text-sm text-black/50 dark:text-white/50 mt-1 mb-4 font-medium">
-							Register your first OAuth client to start using Wikra Auth.
-						</p>
 						<Button
 							onClick={() => setShowDialog(true)}
-							className="font-bold bg-blue-500 text-white border-4 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] neo-brutal-hover"
+							className="font-bold bg-blue-500 text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] neo-brutal-hover"
 						>
 							<Plus className="h-4 w-4 mr-2" />
 							Register Client
 						</Button>
-					</CardContent>
-				</Card>
-			) : (
-				<div className="grid gap-4">
-					{clients.map((client) => (
-						<Card key={client.clientId} className="neo-brutal neo-brutal-white">
-							<CardHeader>
-								<div className="flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<div className="flex h-10 w-10 items-center justify-center bg-blue-400 border-2 border-black dark:border-white">
-											<AppWindow className="h-5 w-5 text-black" />
-										</div>
-										<div>
-											<CardTitle className="text-base font-black text-black dark:text-white">
-												{client.name}
-											</CardTitle>
-											<CardDescription className="font-medium text-black/50 dark:text-white/50">
-												Type: {client.type || "web"}
-											</CardDescription>
-										</div>
-									</div>
-									<div className="flex items-center gap-2">
-										<Badge
-											className={
-												client.disabled
-													? "bg-red-400 text-black border-2 border-black font-bold"
-													: "bg-green-400 text-black border-2 border-black font-bold"
-											}
-										>
-											{client.disabled ? "Disabled" : "Active"}
-										</Badge>
-										<Button
-											variant="ghost"
-											size="icon"
-											className="h-8 w-8 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
-											onClick={() => openEdit(client)}
-										>
-											<Pencil className="h-4 w-4" />
-										</Button>
-										<Button
-											variant="ghost"
-											size="icon"
-											className="h-8 w-8 border-2 border-red-600 text-red-600 hover:bg-red-100 dark:hover:bg-red-900"
-											onClick={() => setDeleteClientId(client.clientId)}
-										>
-											<Trash2 className="h-4 w-4" />
-										</Button>
-									</div>
+					</div>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					{loading ? (
+						<div className="flex justify-center py-12">
+							<div className="h-6 w-6 border-4 border-black dark:border-white border-t-transparent rounded-full animate-spin" />
+						</div>
+					) : clients.length === 0 ? (
+						<Card className="neo-brutal neo-brutal-white">
+							<CardContent className="flex flex-col items-center justify-center py-12 text-center">
+								<div className="flex h-16 w-16 items-center justify-center bg-blue-200 border-4 border-black dark:border-white mb-4">
+									<AppWindow className="h-8 w-8 text-black" />
 								</div>
-							</CardHeader>
-							<CardContent className="space-y-3">
-								<div className="space-y-1">
-									<Label className="text-xs text-black/50 dark:text-white/50 font-bold">
-										Client ID
-									</Label>
-									<div className="flex items-center gap-2">
-										<code className="flex-1 text-xs bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1.5 border-2 border-black dark:border-white break-all font-mono">
-											{client.clientId}
-										</code>
-										<Button
-											variant="ghost"
-											size="icon"
-											className="h-8 w-8 shrink-0 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
-											onClick={() =>
-												copyToClipboard(client.clientId, "Client ID")
-											}
-										>
-											<Copy className="h-3.5 w-3.5" />
-										</Button>
-									</div>
-								</div>
-								<div className="space-y-1">
-									<Label className="text-xs text-black/50 dark:text-white/50 font-bold">
-										Client Secret
-									</Label>
-									<div className="flex items-center gap-2">
-										<code className="flex-1 text-xs bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1.5 border-2 border-black dark:border-white break-all font-mono">
-											{visibleSecrets.has(client.clientId)
-												? client.clientSecret
-												: "••••••••••••••••••••"}
-										</code>
-										<Button
-											variant="ghost"
-											size="icon"
-											className="h-8 w-8 shrink-0 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
-											onClick={() => toggleSecretVisibility(client.clientId)}
-										>
-											{visibleSecrets.has(client.clientId) ? (
-												<EyeOff className="h-3.5 w-3.5" />
-											) : (
-												<Eye className="h-3.5 w-3.5" />
-											)}
-										</Button>
-										<Button
-											variant="ghost"
-											size="icon"
-											className="h-8 w-8 shrink-0 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
-											onClick={() =>
-												copyToClipboard(client.clientSecret, "Client Secret")
-											}
-										>
-											<Copy className="h-3.5 w-3.5" />
-										</Button>
-									</div>
-								</div>
-								<div className="space-y-1">
-									<Label className="text-xs text-black/50 dark:text-white/50 font-bold">
-										Redirect URIs
-									</Label>
-									<p className="text-xs bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1.5 border-2 border-black dark:border-white break-all font-mono">
-										{client.redirectUrls}
-									</p>
-								</div>
+								<h3 className="text-lg font-black text-black dark:text-white">
+									No clients registered
+								</h3>
+								<p className="text-sm text-black/50 dark:text-white/50 mt-1 mb-4 font-medium">
+									Register your first OAuth client to start using Wikra Auth.
+								</p>
+								<Button
+									onClick={() => setShowDialog(true)}
+									className="font-bold bg-blue-500 text-white border-4 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] neo-brutal-hover"
+								>
+									<Plus className="h-4 w-4 mr-2" />
+									Register Client
+								</Button>
 							</CardContent>
 						</Card>
-					))}
-				</div>
-			)}
-			</CardContent>
-		</Card>
+					) : (
+						<div className="grid gap-4">
+							{clients.map((client) => (
+								<Card
+									key={client.clientId}
+									className="neo-brutal neo-brutal-white"
+								>
+									<CardHeader>
+										<div className="flex items-center justify-between">
+											<div className="flex items-center gap-3">
+												<div className="flex h-10 w-10 items-center justify-center bg-blue-400 border-2 border-black dark:border-white">
+													<AppWindow className="h-5 w-5 text-black" />
+												</div>
+												<div>
+													<CardTitle className="text-base font-black text-black dark:text-white">
+														{client.name}
+													</CardTitle>
+													<CardDescription className="font-medium text-black/50 dark:text-white/50">
+														Type: {client.type || "web"}
+													</CardDescription>
+												</div>
+											</div>
+											<div className="flex items-center gap-2">
+												<Badge
+													className={
+														client.disabled
+															? "bg-red-400 text-black border-2 border-black font-bold"
+															: "bg-green-400 text-black border-2 border-black font-bold"
+													}
+												>
+													{client.disabled ? "Disabled" : "Active"}
+												</Badge>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="h-8 w-8 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
+													onClick={() => openEdit(client)}
+												>
+													<Pencil className="h-4 w-4" />
+												</Button>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="h-8 w-8 border-2 border-red-600 text-red-600 hover:bg-red-100 dark:hover:bg-red-900"
+													onClick={() => setDeleteClientId(client.clientId)}
+												>
+													<Trash2 className="h-4 w-4" />
+												</Button>
+											</div>
+										</div>
+									</CardHeader>
+									<CardContent className="space-y-3">
+										<div className="space-y-1">
+											<Label className="text-xs text-black/50 dark:text-white/50 font-bold">
+												Client ID
+											</Label>
+											<div className="flex items-center gap-2">
+												<code className="flex-1 text-xs bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1.5 border-2 border-black dark:border-white break-all font-mono">
+													{client.clientId}
+												</code>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="h-8 w-8 shrink-0 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
+													onClick={() =>
+														copyToClipboard(client.clientId, "Client ID")
+													}
+												>
+													<Copy className="h-3.5 w-3.5" />
+												</Button>
+											</div>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs text-black/50 dark:text-white/50 font-bold">
+												Client Secret
+											</Label>
+											<div className="flex items-center gap-2">
+												<code className="flex-1 text-xs bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1.5 border-2 border-black dark:border-white break-all font-mono">
+													{visibleSecrets.has(client.clientId)
+														? client.clientSecret
+														: "••••••••••••••••••••"}
+												</code>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="h-8 w-8 shrink-0 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
+													onClick={() =>
+														toggleSecretVisibility(client.clientId)
+													}
+												>
+													{visibleSecrets.has(client.clientId) ? (
+														<EyeOff className="h-3.5 w-3.5" />
+													) : (
+														<Eye className="h-3.5 w-3.5" />
+													)}
+												</Button>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="h-8 w-8 shrink-0 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
+													onClick={() =>
+														copyToClipboard(
+															client.clientSecret,
+															"Client Secret",
+														)
+													}
+												>
+													<Copy className="h-3.5 w-3.5" />
+												</Button>
+											</div>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs text-black/50 dark:text-white/50 font-bold">
+												Redirect URIs
+											</Label>
+											<p className="text-xs bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1.5 border-2 border-black dark:border-white break-all font-mono">
+												{client.redirectUrls}
+											</p>
+										</div>
+									</CardContent>
+								</Card>
+							))}
+						</div>
+					)}
+				</CardContent>
+			</Card>
 
 			<Dialog
 				open={!!editClient}
@@ -554,10 +570,7 @@ export default function ClientsPage() {
 									size="icon"
 									className="border-2 border-black dark:border-white hover:bg-yellow-200"
 									onClick={() =>
-										copyToClipboard(
-											createdClient?.clientId || "",
-											"Client ID",
-										)
+										copyToClipboard(createdClient?.clientId || "", "Client ID")
 									}
 								>
 									<Copy className="h-4 w-4" />

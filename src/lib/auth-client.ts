@@ -1,7 +1,6 @@
 "use client";
 
-import { adminClient } from "better-auth/client/plugins";
-import { oidcClient } from "better-auth/client/plugins";
+import { adminClient, oidcClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
 const getBaseURL = () => {
