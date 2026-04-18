@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { ManageUserAppRolesDialog } from "@/components/dashboard/manage-user-app-roles-dialog";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -53,7 +54,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { ManageUserAppRolesDialog } from "@/components/dashboard/manage-user-app-roles-dialog";
 import { authClient } from "@/lib/auth-client";
 
 interface User {
@@ -284,8 +284,8 @@ export default function UsersPage() {
 							Change Global Role
 						</DialogTitle>
 						<DialogDescription className="font-medium text-black/60">
-							Controls access to Wikra Auth dashboard itself. For per-app
-							roles use "App Roles" instead. User:{" "}
+							Controls access to Wikra Auth dashboard itself. For per-app roles
+							use "App Roles" instead. User:{" "}
 							{roleDialog?.name || roleDialog?.email}
 						</DialogDescription>
 					</DialogHeader>
@@ -318,9 +318,7 @@ export default function UsersPage() {
 
 			<ManageUserAppRolesDialog
 				userId={appRolesDialog?.id ?? null}
-				userLabel={
-					appRolesDialog?.name || appRolesDialog?.email || "user"
-				}
+				userLabel={appRolesDialog?.name || appRolesDialog?.email || "user"}
 				open={!!appRolesDialog}
 				onOpenChange={(open) => !open && setAppRolesDialog(null)}
 			/>

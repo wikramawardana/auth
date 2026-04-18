@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { ManageClientRolesDialog } from "@/components/dashboard/manage-client-roles-dialog";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -39,7 +40,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { ManageClientRolesDialog } from "@/components/dashboard/manage-client-roles-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";

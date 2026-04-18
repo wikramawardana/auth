@@ -226,8 +226,8 @@ export function ManageUserAppRolesDialog({
 
 									{roles.length === 0 ? (
 										<p className="text-xs text-black/50 dark:text-white/50 italic">
-											No roles defined for this client. Add roles in the
-											Clients page first.
+											No roles defined for this client. Add roles in the Clients
+											page first.
 										</p>
 									) : (
 										<div className="flex items-center gap-2">
@@ -236,9 +236,7 @@ export function ManageUserAppRolesDialog({
 											</Label>
 											<Select
 												value={current ?? ""}
-												onValueChange={(v) =>
-													handleSelect(client.clientId, v)
-												}
+												onValueChange={(v) => handleSelect(client.clientId, v)}
 												disabled={pendingClient === client.clientId}
 											>
 												<SelectTrigger className="border-2 border-black dark:border-white font-bold">
