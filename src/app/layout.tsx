@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Wikra Auth",
-	description: "Centralized authentication service",
+	title: "Wikra Auth - Centralized Authentication",
+	description:
+		"Manage users, roles, and OAuth clients across all your apps from a single dashboard.",
 };
 
 export default function RootLayout({

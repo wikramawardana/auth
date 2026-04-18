@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	AppWindow,
 	Ban,
 	MoreHorizontal,
 	Search,
@@ -52,6 +53,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { ManageUserAppRolesDialog } from "@/components/dashboard/manage-user-app-roles-dialog";
 import { authClient } from "@/lib/auth-client";
 
 interface User {
@@ -71,6 +73,7 @@ export default function UsersPage() {
 	const [roleDialog, setRoleDialog] = useState<User | null>(null);
 	const [selectedRole, setSelectedRole] = useState("");
 	const [banDialog, setBanDialog] = useState<User | null>(null);
+	const [appRolesDialog, setAppRolesDialog] = useState<User | null>(null);
 
 	const fetchUsers = useCallback(async () => {
 		setLoading(true);
@@ -236,7 +239,14 @@ export default function UsersPage() {
 													className="font-bold"
 												>
 													<UserCog className="h-4 w-4 mr-2" />
-													Change Role
+													Change Global Role
+												</DropdownMenuItem>
+												<DropdownMenuItem
+													onClick={() => setAppRolesDialog(user)}
+													className="font-bold"
+												>
+													<AppWindow className="h-4 w-4 mr-2" />
+													App Roles
 												</DropdownMenuItem>
 												<DropdownMenuSeparator />
 												<DropdownMenuItem
@@ -271,10 +281,12 @@ export default function UsersPage() {
 				<DialogContent className="neo-brutal neo-brutal-white">
 					<DialogHeader>
 						<DialogTitle className="font-black text-black">
-							Change User Role
+							Change Global Role
 						</DialogTitle>
 						<DialogDescription className="font-medium text-black/60">
-							Update role for {roleDialog?.name || roleDialog?.email}
+							Controls access to Wikra Auth dashboard itself. For per-app
+							roles use "App Roles" instead. User:{" "}
+							{roleDialog?.name || roleDialog?.email}
 						</DialogDescription>
 					</DialogHeader>
 					<Select value={selectedRole} onValueChange={setSelectedRole}>
@@ -303,6 +315,15 @@ export default function UsersPage() {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
+
+			<ManageUserAppRolesDialog
+				userId={appRolesDialog?.id ?? null}
+				userLabel={
+					appRolesDialog?.name || appRolesDialog?.email || "user"
+				}
+				open={!!appRolesDialog}
+				onOpenChange={(open) => !open && setAppRolesDialog(null)}
+			/>
 
 			<AlertDialog open={!!banDialog} onOpenChange={() => setBanDialog(null)}>
 				<AlertDialogContent className="neo-brutal neo-brutal-white">

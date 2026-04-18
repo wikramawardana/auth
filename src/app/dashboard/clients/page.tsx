@@ -7,6 +7,7 @@ import {
 	EyeOff,
 	Pencil,
 	Plus,
+	ShieldCheck,
 	Trash2,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -38,6 +39,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { ManageClientRolesDialog } from "@/components/dashboard/manage-client-roles-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
@@ -79,6 +81,7 @@ export default function ClientsPage() {
 		redirectUri: "",
 	});
 	const [saving, setSaving] = useState(false);
+	const [rolesClient, setRolesClient] = useState<OAuthClient | null>(null);
 
 	const fetchClients = useCallback(async () => {
 		setLoading(true);
@@ -295,6 +298,16 @@ export default function ClientsPage() {
 													variant="ghost"
 													size="icon"
 													className="h-8 w-8 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
+													title="Manage roles"
+													onClick={() => setRolesClient(client)}
+												>
+													<ShieldCheck className="h-4 w-4" />
+												</Button>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="h-8 w-8 border-2 border-black dark:border-white hover:bg-yellow-200 dark:hover:bg-yellow-800"
+													title="Edit client"
 													onClick={() => openEdit(client)}
 												>
 													<Pencil className="h-4 w-4" />
@@ -542,6 +555,13 @@ export default function ClientsPage() {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
+
+			<ManageClientRolesDialog
+				clientId={rolesClient?.clientId ?? null}
+				clientName={rolesClient?.name ?? ""}
+				open={!!rolesClient}
+				onOpenChange={(open) => !open && setRolesClient(null)}
+			/>
 
 			<Dialog
 				open={!!createdClient}

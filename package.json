@@ -10,7 +10,8 @@
 		"lint:fix": "biome check --write",
 		"format": "biome format --write",
 		"db:migrate": "npx @better-auth/cli migrate",
-		"db:generate": "npx @better-auth/cli generate"
+		"db:generate": "npx @better-auth/cli generate",
+		"db:migrate:app": "node scripts/run-migrations.js"
 	},
 	"dependencies": {
 		"@radix-ui/react-alert-dialog": "^1.1.15",

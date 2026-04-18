@@ -2,6 +2,7 @@ import dns from "node:dns";
 import { betterAuth } from "better-auth";
 import { admin, jwt, oidcProvider } from "better-auth/plugins";
 import { Pool } from "pg";
+import { getUserRoleForClient } from "./app-roles";
 
 dns.setDefaultResultOrder("ipv4first");
 
@@ -58,9 +59,25 @@ export const auth = betterAuth({
 			loginPage: "/login",
 			consentPage: "/consent",
 			trustedClients: parseTrustedClients(),
-			getAdditionalUserInfoClaim: async (user) => ({
-				role: (user as Record<string, unknown>).role ?? "user",
-			}),
+			getAdditionalUserInfoClaim: async (user, _scopes, client) => {
+				const globalRole =
+					((user as Record<string, unknown>).role as string | undefined) ??
+					"user";
+
+				let appRole: string | null = null;
+				if (client?.clientId) {
+					try {
+						appRole = await getUserRoleForClient(user.id, client.clientId);
+					} catch (err) {
+						console.error("Failed to resolve app_role claim:", err);
+					}
+				}
+
+				return {
+					role: globalRole,
+					app_role: appRole ?? "user",
+				};
+			},
 		}),
 		admin({
 			defaultRole: "user",

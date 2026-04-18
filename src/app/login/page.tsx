@@ -83,45 +83,11 @@ function LoginForm() {
 
 	if (isOidcFlow) {
 		return (
-			<div className="min-h-screen w-full flex items-center justify-center bg-[#f5f5f0] p-4">
-				<Card className="w-full max-w-sm bg-white border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative">
-					<CardHeader className="text-center space-y-5 pb-2 pt-8">
-						<div className="mx-auto flex items-center justify-center w-16 h-16 bg-black">
-							<Shield className="w-9 h-9 text-white" />
-						</div>
-						<div className="space-y-1">
-							<CardTitle className="text-2xl font-black tracking-tight text-black uppercase">
-								Wikra Auth
-							</CardTitle>
-							<CardDescription className="text-sm font-medium text-black/50">
-								{isLoading || isPending
-									? "Redirecting to Google..."
-									: "Sign in to continue"}
-							</CardDescription>
-						</div>
-					</CardHeader>
-
-					<CardContent className="space-y-6 pb-8">
-						{isLoading || isPending ? (
-							<div className="flex justify-center py-2">
-								<div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin" />
-							</div>
-						) : (
-							<>
-								<div className="w-full h-[2px] bg-black/10" />
-								<Button
-									onClick={triggerGoogleSignIn}
-									className="w-full h-12 text-base font-bold bg-white text-black border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] transition-all duration-150"
-								>
-									<div className="flex items-center gap-3">
-										<GoogleIcon className="w-5 h-5" />
-										<span>Continue with Google</span>
-									</div>
-								</Button>
-							</>
-						)}
-					</CardContent>
-				</Card>
+			<div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#f5f5f0] p-4 gap-4">
+				<div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+				<p className="text-sm font-medium text-black/60">
+					Redirecting to Google...
+				</p>
 			</div>
 		);
 	}
