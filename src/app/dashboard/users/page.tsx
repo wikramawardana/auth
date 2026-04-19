@@ -284,9 +284,8 @@ export default function UsersPage() {
 							Change Global Role
 						</DialogTitle>
 						<DialogDescription className="font-medium text-black/60">
-							Controls access to Auth dashboard itself. For per-app roles
-							use "App Roles" instead. User:{" "}
-							{roleDialog?.name || roleDialog?.email}
+							Controls access to Auth dashboard itself. For per-app roles use
+							"App Roles" instead. User: {roleDialog?.name || roleDialog?.email}
 						</DialogDescription>
 					</DialogHeader>
 					<Select value={selectedRole} onValueChange={setSelectedRole}>
