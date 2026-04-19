@@ -1,7 +1,7 @@
 services:
-  wikra-auth:
-    image: ${DOCKER_IMAGE:-ghcr.io/wikramawardana/wikra-auth}:${DOCKER_TAG:-latest}
-    container_name: wikra-auth
+  auth:
+    image: ${DOCKER_IMAGE:-ghcr.io/wikramawardana/auth}:${DOCKER_TAG:-latest}
+    container_name: auth
     restart: unless-stopped
     ports:
       - "3001:3000"

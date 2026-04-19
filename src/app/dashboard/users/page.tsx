@@ -284,7 +284,7 @@ export default function UsersPage() {
 							Change Global Role
 						</DialogTitle>
 						<DialogDescription className="font-medium text-black/60">
-							Controls access to Wikra Auth dashboard itself. For per-app roles
+							Controls access to Auth dashboard itself. For per-app roles
 							use "App Roles" instead. User:{" "}
 							{roleDialog?.name || roleDialog?.email}
 						</DialogDescription>

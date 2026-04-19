@@ -16,7 +16,7 @@ export default function HomePage() {
 						<Shield className="h-6 w-6 text-black" strokeWidth={2.5} />
 					</div>
 					<span className="text-xl font-black uppercase tracking-tight">
-						Wikra Auth
+						Auth
 					</span>
 				</Link>
 			</header>
@@ -100,7 +100,7 @@ export default function HomePage() {
 
 			<footer className="relative z-10 border-t-[3px] border-black bg-white">
 				<div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-6 text-sm font-medium text-black/60 sm:flex-row">
-					<p>© {new Date().getFullYear()} Wikra Auth. Built by Wikra.</p>
+					<p>© {new Date().getFullYear()} Auth. Built by Wikra.</p>
 					<p>Centralized authentication service.</p>
 				</div>
 			</footer>

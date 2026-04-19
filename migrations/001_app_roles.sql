@@ -1,7 +1,7 @@
 -- 001_app_roles.sql
 -- Adds per-client role definitions and user<->client role assignments so that
 -- each OIDC client (dapur-buwikra, expense-tracker, ...) can expose its own
--- role vocabulary and wikra-auth admins can assign roles per user per client.
+-- role vocabulary and auth admins can assign roles per user per client.
 
 BEGIN;
 

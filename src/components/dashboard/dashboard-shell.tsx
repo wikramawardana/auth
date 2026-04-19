@@ -85,7 +85,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 								<Shield className="h-5 w-5 text-black" />
 							</div>
 							<div className="flex flex-col">
-								<span className="text-sm leading-tight">Wikra Auth</span>
+								<span className="text-sm leading-tight">Auth</span>
 								<span className="text-[10px] font-medium text-black/50 leading-tight">
 									Admin Panel
 								</span>

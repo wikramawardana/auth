@@ -102,8 +102,8 @@ jobs:
           script: |
             cd /home/wikra/production-projects
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker compose pull wikra-auth
-            docker compose up -d wikra-auth
+            docker compose pull auth
+            docker compose up -d auth
             docker image prune -f
 
   health-check:

@@ -224,7 +224,7 @@ export default function ClientsPage() {
 								OAuth Clients
 							</CardTitle>
 							<CardDescription className="font-medium text-black/60">
-								Manage registered applications that can use Wikra Auth.
+								Manage registered applications that can use Auth.
 							</CardDescription>
 						</div>
 						<Button
@@ -251,7 +251,7 @@ export default function ClientsPage() {
 									No clients registered
 								</h3>
 								<p className="text-sm text-black/50 dark:text-white/50 mt-1 mb-4 font-medium">
-									Register your first OAuth client to start using Wikra Auth.
+									Register your first OAuth client to start using Auth.
 								</p>
 								<Button
 									onClick={() => setShowDialog(true)}
@@ -500,7 +500,7 @@ export default function ClientsPage() {
 							Register OAuth Client
 						</DialogTitle>
 						<DialogDescription className="font-medium text-black/60 dark:text-white/60">
-							Register a new application to use Wikra Auth for authentication.
+							Register a new application to use Auth for authentication.
 						</DialogDescription>
 					</DialogHeader>
 					<div className="space-y-4">
@@ -522,7 +522,7 @@ export default function ClientsPage() {
 								Redirect URI
 							</Label>
 							<Input
-								placeholder="https://myapp.com/api/auth/callback/wikra-auth"
+								placeholder="https://myapp.com/api/auth/callback/auth"
 								value={form.redirectUri}
 								onChange={(e) =>
 									setForm((prev) => ({

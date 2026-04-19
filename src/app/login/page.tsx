@@ -107,7 +107,7 @@ function LoginForm() {
 
 					<div className="space-y-1">
 						<CardTitle className="text-2xl font-black tracking-tight text-black uppercase">
-							Wikra Auth
+							Auth
 						</CardTitle>
 						<CardDescription className="text-sm font-medium text-black/50">
 							Sign in to continue
@@ -157,7 +157,7 @@ function LoginLoading() {
 					</div>
 					<div className="space-y-1">
 						<CardTitle className="text-2xl font-black tracking-tight text-black uppercase">
-							Wikra Auth
+							Auth
 						</CardTitle>
 						<CardDescription className="text-sm font-medium text-black/50">
 							Loading...
