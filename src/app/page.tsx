@@ -1,8 +1,18 @@
 import { ArrowRight, KeyRound, Shield, UserCog, Users } from "lucide-react";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+	const cookieStore = await cookies();
+
+	if (cookieStore.has("oidc_login_prompt")) {
+		redirect("/login");
+	}
+
 	return (
 		<div className="relative grid min-h-dvh w-full grid-rows-[auto_1fr_auto] bg-[#f5f5f0] text-black">
 			<div className="pointer-events-none absolute top-20 left-10 hidden h-16 w-16 rotate-12 border-4 border-black md:block" />
