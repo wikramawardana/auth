@@ -1,9 +1,40 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = ["/", "/login", "/consent", "/api/auth"];
+const publicPrefixes = ["/login", "/consent", "/api/auth"];
 
 const adminRoutes = ["/dashboard"];
+
+function logRequest(
+	request: NextRequest,
+	response: NextResponse,
+	startedAt: number,
+	reason: string,
+) {
+	const userAgent = request.headers.get("user-agent") || "";
+	if (userAgent.startsWith("kube-probe")) {
+		return response;
+	}
+
+	const durationMs = Date.now() - startedAt;
+	const { pathname, search } = request.nextUrl;
+	const log = {
+		event: "frontend_request",
+		method: request.method,
+		path: `${pathname}${search}`,
+		status: response.status,
+		reason,
+		duration_ms: durationMs,
+	};
+
+	console.log(JSON.stringify(log));
+	return response;
+}
+
+function isPublicRoute(pathname: string): boolean {
+	if (pathname === "/") return true;
+	return publicPrefixes.some((prefix) => pathname.startsWith(prefix));
+}
 
 function getBaseUrl(request: NextRequest): string {
 	if (process.env.NODE_ENV === "production") {
@@ -12,19 +43,29 @@ function getBaseUrl(request: NextRequest): string {
 	return request.nextUrl.origin;
 }
 
+function redirectToLogin(request: NextRequest, pathname: string) {
+	const loginUrl = new URL("/login", request.url);
+	loginUrl.searchParams.set("callbackUrl", pathname);
+	return NextResponse.redirect(loginUrl);
+}
+
 export async function middleware(request: NextRequest) {
+	const startedAt = Date.now();
 	const { pathname } = request.nextUrl;
 
-	if (publicRoutes.some((route) => pathname.startsWith(route))) {
-		return NextResponse.next();
+	if (isPublicRoute(pathname)) {
+		return logRequest(request, NextResponse.next(), startedAt, "public");
 	}
 
 	const sessionCookie = getSessionCookie(request);
 
 	if (!sessionCookie) {
-		const loginUrl = new URL("/login", request.url);
-		loginUrl.searchParams.set("callbackUrl", pathname);
-		return NextResponse.redirect(loginUrl);
+		return logRequest(
+			request,
+			redirectToLogin(request, pathname),
+			startedAt,
+			"no_session",
+		);
 	}
 
 	try {
@@ -36,30 +77,47 @@ export async function middleware(request: NextRequest) {
 		});
 
 		if (!sessionResponse.ok) {
-			const loginUrl = new URL("/login", request.url);
-			loginUrl.searchParams.set("callbackUrl", pathname);
-			return NextResponse.redirect(loginUrl);
+			return logRequest(
+				request,
+				redirectToLogin(request, pathname),
+				startedAt,
+				"session_lookup_failed",
+			);
 		}
 
 		const session = await sessionResponse.json();
 
 		if (!session?.user) {
-			const loginUrl = new URL("/login", request.url);
-			loginUrl.searchParams.set("callbackUrl", pathname);
-			return NextResponse.redirect(loginUrl);
+			return logRequest(
+				request,
+				redirectToLogin(request, pathname),
+				startedAt,
+				"missing_user",
+			);
 		}
 
 		if (adminRoutes.some((route) => pathname.startsWith(route))) {
 			if (session.user.role !== "admin") {
-				return NextResponse.redirect(new URL("/", request.url));
+				return logRequest(
+					request,
+					NextResponse.redirect(new URL("/", request.url)),
+					startedAt,
+					"forbidden_role",
+				);
 			}
+
+			return logRequest(request, NextResponse.next(), startedAt, "authorized");
 		}
 
-		return NextResponse.next();
+		return logRequest(request, NextResponse.next(), startedAt, "authenticated");
 	} catch (error) {
 		console.error("Middleware auth error:", error);
-		const loginUrl = new URL("/login", request.url);
-		return NextResponse.redirect(loginUrl);
+		return logRequest(
+			request,
+			redirectToLogin(request, pathname),
+			startedAt,
+			"auth_error",
+		);
 	}
 }
 
