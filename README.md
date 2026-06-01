@@ -105,7 +105,7 @@ The server starts at `http://localhost:3001`.
 
 Production image tags use the short git SHA. After you push to `main`, GitHub
 Actions builds and pushes `ghcr.io/wikramawardana/auth:<short-sha>`.
-If the build succeeds and `GITOPS_TOKEN` is configured, the workflow updates
+If the build succeeds and `GITOPS_TOKEN` or `GH_PAT` is configured, the workflow updates
 GitOps automatically:
 
 `wikra-gitops/manifests/auth/overlays/prod/kustomization.yaml`

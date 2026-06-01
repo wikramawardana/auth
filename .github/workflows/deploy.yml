@@ -115,7 +115,7 @@ jobs:
     steps:
       - name: Update image tag in GitOps repo
         env:
-          GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+          GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN || secrets.GH_PAT }}
         run: |
           if [ -z "${GITOPS_TOKEN}" ]; then
             echo "::warning::GITOPS_TOKEN secret is not set – skipping GitOps update"
