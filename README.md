@@ -104,9 +104,9 @@ The server starts at `http://localhost:3001`.
 ## Production Deployment
 
 Production image tags use the short git SHA. After you push to `main`, GitHub
-Actions builds and pushes `ghcr.io/wikramawardana/auth:<short-sha>`.
-If the build succeeds and `GITOPS_TOKEN` or `GH_PAT` is configured, the workflow updates
-GitOps automatically:
+Actions builds and pushes `ghcr.io/wikramawardana/auth:<short-sha>`. If the
+build succeeds, the workflow updates GitOps automatically using `GITOPS_TOKEN`
+or `GH_PAT`:
 
 `wikra-gitops/manifests/auth/overlays/prod/kustomization.yaml`
 
@@ -114,7 +114,7 @@ Normal flow:
 
 1. Edit this repo.
 2. Commit and push to `main`.
-3. Wait for the GitHub Actions build to succeed.
+3. Wait for the GitHub Actions build and GitOps update to succeed.
 4. Confirm the workflow committed the new GitOps `newTag`.
 5. Wait for Argo CD to show `auth` as `Synced` and `Healthy`.
 
