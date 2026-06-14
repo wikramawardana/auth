@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/card";
 import { signIn, useSession } from "@/lib/auth-client";
 
+const OIDC_CALLBACK_STORAGE_KEY = "auth.oidc.callbackUrl";
+
 function GoogleIcon({ className }: { className?: string }) {
 	return (
 		<svg
@@ -49,6 +51,7 @@ function LoginForm() {
 
 	const clientId = searchParams.get("client_id");
 	const oidcState = searchParams.get("state");
+	const shouldResumeOidc = searchParams.get("resumeOidc") === "1";
 	const isOidcFlow = !!(clientId && oidcState);
 
 	const callbackUrl = isOidcFlow
@@ -58,21 +61,36 @@ function LoginForm() {
 	const triggerGoogleSignIn = React.useCallback(async () => {
 		setIsLoading(true);
 		try {
+			const signInCallbackUrl = isOidcFlow
+				? "/login?resumeOidc=1"
+				: callbackUrl;
+
+			if (isOidcFlow) {
+				window.sessionStorage.setItem(OIDC_CALLBACK_STORAGE_KEY, callbackUrl);
+			}
+
 			await signIn.social({
 				provider: "google",
-				callbackURL: callbackUrl,
+				callbackURL: signInCallbackUrl,
 			});
 		} catch (error) {
 			console.error("Sign in error:", error);
 			setIsLoading(false);
 		}
-	}, [callbackUrl]);
+	}, [callbackUrl, isOidcFlow]);
 
 	React.useEffect(() => {
 		if (!isPending && session) {
-			window.location.href = callbackUrl;
+			const storedOidcCallback = shouldResumeOidc
+				? window.sessionStorage.getItem(OIDC_CALLBACK_STORAGE_KEY)
+				: null;
+			if (storedOidcCallback) {
+				window.sessionStorage.removeItem(OIDC_CALLBACK_STORAGE_KEY);
+			}
+
+			window.location.href = storedOidcCallback || callbackUrl;
 		}
-	}, [session, isPending, callbackUrl]);
+	}, [session, isPending, callbackUrl, shouldResumeOidc]);
 
 	React.useEffect(() => {
 		if (!isPending && !session && isOidcFlow && !autoTriggered.current) {
