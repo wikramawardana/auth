@@ -103,6 +103,10 @@ The server starts at `http://localhost:3001`.
 
 ## Production Deployment
 
+For the current Kubernetes/GitOps production flow and OAuth client setup, read:
+
+- [Auth deployment and OAuth runbook](docs/deployment.md)
+
 Production image tags use the short git SHA. After you push to `main`, GitHub
 Actions builds and pushes `ghcr.io/wikramawardana/auth:<short-sha>`. If the
 build succeeds, the workflow updates GitOps automatically using `GITOPS_TOKEN`
