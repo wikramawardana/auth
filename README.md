@@ -107,10 +107,10 @@ For the current Kubernetes/GitOps production flow and OAuth client setup, read:
 
 - [Auth deployment and OAuth runbook](docs/deployment.md)
 
-Production image tags use the short git SHA. After you push to `main`, GitHub
-Actions builds and pushes `ghcr.io/wikramawardana/auth:<short-sha>`. If the
-build succeeds, the workflow updates GitOps automatically using `GITOPS_TOKEN`
-or `GH_PAT`:
+Production image tags use immutable version-build tags. After you push to
+`main`, GitHub Actions builds and pushes a tag such as
+`ghcr.io/wikramawardana/auth:v0.1.0-build.12`. If the build succeeds, the
+workflow updates GitOps automatically using `GITOPS_TOKEN` or `GH_PAT`:
 
 `wikra-gitops/manifests/auth/overlays/prod/kustomization.yaml`
 

@@ -8,7 +8,7 @@ k3s Kubernetes cluster through GitOps.
 | Item | Value |
 | --- | --- |
 | Repository | `wikramawardana/auth` |
-| Image | `ghcr.io/wikramawardana/auth:<short-sha>` |
+| Image | `ghcr.io/wikramawardana/auth:v<package-version>-build.<run-number>` |
 | Kubernetes namespace | `wikra-apps` |
 | Kubernetes app/deployment | `auth` |
 | Container port | `3000` |
@@ -51,12 +51,16 @@ Add every app origin that uses Auth to `ALLOWED_ORIGINS`.
    ```
 
 3. Commit and push to `main`.
-4. GitHub Actions builds and pushes `ghcr.io/wikramawardana/auth:<short-sha>`.
+4. GitHub Actions reads `package.json` `version`, then builds and pushes an
+   immutable image tag such as
+   `ghcr.io/wikramawardana/auth:v0.1.0-build.123`.
 5. The workflow updates:
 
    ```text
    wikra-gitops/manifests/auth/overlays/prod/kustomization.yaml
    ```
+
+   The `newTag` value must be a version-build tag, not a git commit SHA.
 
 6. Argo CD syncs the GitOps change into Kubernetes.
 7. Verify production.
@@ -117,4 +121,3 @@ If Tuwaga login redirects to the Auth home page or fails with
 Do not fix production by only patching the generated Kubernetes Secret. The
 ExternalSecret controller will overwrite it from Vault. Patch Vault first, then
 force ExternalSecret sync and restart the deployment.
-
