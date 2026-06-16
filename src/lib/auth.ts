@@ -6,7 +6,7 @@ import { getUserRoleForClient } from "./app-roles";
 
 dns.setDefaultResultOrder("ipv4first");
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 function parseTrustedClients() {
 	const raw = process.env.TRUSTED_CLIENTS;
@@ -93,8 +93,8 @@ export const auth = betterAuth({
 	},
 	trustedOrigins: [
 		appUrl,
-		"http://localhost:3001",
-		"http://127.0.0.1:3001",
+		"http://localhost:3000",
+		"http://127.0.0.1:3000",
 		...(process.env.ALLOWED_ORIGINS?.split(",").map((s) => s.trim()) || []),
 	],
 });

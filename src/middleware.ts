@@ -38,7 +38,7 @@ function isPublicRoute(pathname: string): boolean {
 
 function getBaseUrl(request: NextRequest): string {
 	if (process.env.NODE_ENV === "production") {
-		return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
+		return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 	}
 	return request.nextUrl.origin;
 }
