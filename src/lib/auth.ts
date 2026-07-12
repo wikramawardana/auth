@@ -83,13 +83,34 @@ export const auth = betterAuth({
 			defaultRole: "user",
 		}),
 	],
+	databaseHooks: {
+		user: {
+			update: {
+				async before(user, context) {
+					// Roles are authorization data, not identity-provider profile data.
+					// Only Better Auth's admin endpoints may change them. This prevents a
+					// social-provider profile refresh from overwriting an existing role.
+					const adminRoleEndpoints = ["/admin/set-role", "/admin/update-user"];
+					if (
+						"role" in user &&
+						!adminRoleEndpoints.includes(context?.path ?? "")
+					) {
+						const { role: _role, ...profile } = user;
+						return { data: profile };
+					}
+
+					return { data: user };
+				},
+			},
+		},
+	},
 	session: {
 		expiresIn: 60 * 60 * 24,
 		updateAge: 60 * 60,
-		cookieCache: {
-			enabled: true,
-			maxAge: 60 * 5,
-		},
+		// Authorization must be read from the shared database. A cookie cache
+		// keeps an old copy of user.role and makes role changes differ by device
+		// (and by server instance) until the cache expires.
+		cookieCache: { enabled: false },
 	},
 	trustedOrigins: [
 		appUrl,

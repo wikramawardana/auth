@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/card";
 import { signIn, useSession } from "@/lib/auth-client";
 
-const OIDC_CALLBACK_STORAGE_KEY = "auth.oidc.callbackUrl";
-
 function GoogleIcon({ className }: { className?: string }) {
 	return (
 		<svg
@@ -51,23 +49,22 @@ function LoginForm() {
 
 	const clientId = searchParams.get("client_id");
 	const oidcState = searchParams.get("state");
-	const shouldResumeOidc = searchParams.get("resumeOidc") === "1";
 	const isOidcFlow = !!(clientId && oidcState);
+	const resumedCallback = searchParams.get("oidcCallback");
 
 	const callbackUrl = isOidcFlow
 		? `/api/auth/oauth2/authorize?${searchParams.toString()}`
-		: searchParams.get("callbackUrl") || "/dashboard";
+		: resumedCallback || searchParams.get("callbackUrl") || "/dashboard";
 
 	const triggerGoogleSignIn = React.useCallback(async () => {
 		setIsLoading(true);
 		try {
+			// Keep the original authorization request inside Better Auth's signed
+			// OAuth state. sessionStorage is tab-local and can be lost during the
+			// provider round trip, leaving the user on the auth landing page.
 			const signInCallbackUrl = isOidcFlow
-				? "/login?resumeOidc=1"
+				? `/login?oidcCallback=${encodeURIComponent(callbackUrl)}`
 				: callbackUrl;
-
-			if (isOidcFlow) {
-				window.sessionStorage.setItem(OIDC_CALLBACK_STORAGE_KEY, callbackUrl);
-			}
 
 			await signIn.social({
 				provider: "google",
@@ -81,16 +78,9 @@ function LoginForm() {
 
 	React.useEffect(() => {
 		if (!isPending && session) {
-			const storedOidcCallback = shouldResumeOidc
-				? window.sessionStorage.getItem(OIDC_CALLBACK_STORAGE_KEY)
-				: null;
-			if (storedOidcCallback) {
-				window.sessionStorage.removeItem(OIDC_CALLBACK_STORAGE_KEY);
-			}
-
-			window.location.href = storedOidcCallback || callbackUrl;
+			window.location.replace(callbackUrl);
 		}
-	}, [session, isPending, callbackUrl, shouldResumeOidc]);
+	}, [session, isPending, callbackUrl]);
 
 	React.useEffect(() => {
 		if (!isPending && !session && isOidcFlow && !autoTriggered.current) {
