@@ -35,10 +35,14 @@ BETTER_AUTH_SECRET=<production secret>
 DATABASE_URL=<production PostgreSQL URL>
 GOOGLE_CLIENT_ID=<Google OAuth client id>
 GOOGLE_CLIENT_SECRET=<Google OAuth client secret>
-ALLOWED_ORIGINS=https://dapurbuwikra.biz.id,https://oops.wikra.my.id,https://tuwaga.wikra.my.id
+ALLOWED_ORIGINS=https://auth.wikra.my.id
 ```
 
-Add every app origin that uses Auth to `ALLOWED_ORIGINS`.
+The Auth origin is trusted automatically from `NEXT_PUBLIC_APP_URL`. Keep this
+variable for explicitly configured origins or local development. Product
+origins are derived automatically from the redirect URLs of active OAuth
+clients stored in the Auth database, so a new product does not require an Auth
+Vault update.
 
 ## Normal Deploy Flow
 
@@ -89,15 +93,15 @@ curl -fsSIL https://auth.wikra.my.id
    ```
 
 4. Save the generated client id and secret into the product Vault path.
-5. Add the product origin to Auth `ALLOWED_ORIGINS` in Vault.
-6. Force ExternalSecret sync or wait for it:
+5. Force ExternalSecret sync or wait for it if the product/Auth environment
+   variables changed:
 
    ```bash
    kubectl -n wikra-apps annotate externalsecret auth-env force-sync=$(date +%s) --overwrite
    kubectl -n wikra-apps rollout restart deploy/auth
    ```
 
-7. Restart the product deployment after its env changes sync.
+6. Restart the product deployment after its env changes sync.
 
 ## Tuwaga OAuth Notes
 
@@ -113,7 +117,7 @@ If Tuwaga login redirects to the Auth home page or fails with
 
 - The Tuwaga FE `AUTH_CLIENT_ID` matches the production Auth DB client.
 - The Auth DB has the Tuwaga client and redirect URL.
-- `ALLOWED_ORIGINS` includes `https://tuwaga.wikra.my.id`.
+- The OAuth client has the exact Tuwaga redirect URL registered.
 - User app role for the Tuwaga client is `admin` when accessing `/admin`.
 
 ## Important

@@ -76,7 +76,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/auth
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 
-# Allowed Origins (comma-separated, for CORS/trusted origins from client apps)
+# Optional extra origins (registered OAuth client origins are discovered from the database)
 ALLOWED_ORIGINS=http://localhost:3000
 
 # Trusted Clients (JSON array) - for pre-registered clients that skip consent

@@ -7,6 +7,13 @@ import { getUserRoleForClient } from "./app-roles";
 dns.setDefaultResultOrder("ipv4first");
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const database = new Pool({
+	connectionString: process.env.DATABASE_URL,
+});
+
+const REGISTERED_ORIGINS_CACHE_TTL_MS = 60_000;
+let registeredOriginsCache: string[] = [];
+let registeredOriginsCacheExpiresAt = 0;
 
 function parseTrustedClients() {
 	const raw = process.env.TRUSTED_CLIENTS;
@@ -37,12 +44,63 @@ function parseTrustedClients() {
 	}
 }
 
+function getUrlOrigin(value: string): string | null {
+	try {
+		const url = new URL(value);
+		if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+		if (url.username || url.password) return null;
+		return url.origin;
+	} catch {
+		return null;
+	}
+}
+
+function uniqueOrigins(origins: Array<string | null>): string[] {
+	return [
+		...new Set(origins.filter((origin): origin is string => Boolean(origin))),
+	];
+}
+
+const trustedClients = parseTrustedClients();
+const configuredOrigins = uniqueOrigins([
+	appUrl,
+	"http://localhost:3000",
+	"http://127.0.0.1:3000",
+	...(process.env.ALLOWED_ORIGINS?.split(",").map((s) =>
+		getUrlOrigin(s.trim()),
+	) || []),
+	...trustedClients.flatMap((client) => client.redirectUrls.map(getUrlOrigin)),
+]);
+
+async function getRegisteredClientOrigins(): Promise<string[]> {
+	if (Date.now() < registeredOriginsCacheExpiresAt) {
+		return registeredOriginsCache;
+	}
+
+	try {
+		const result = await database.query<{ redirectUrls: string | null }>(
+			'SELECT "redirectUrls" FROM "oauthApplication" WHERE "disabled" = FALSE',
+		);
+		registeredOriginsCache = uniqueOrigins(
+			result.rows.flatMap((row) =>
+				(row.redirectUrls ?? "").split(",").map(getUrlOrigin),
+			),
+		);
+		registeredOriginsCacheExpiresAt =
+			Date.now() + REGISTERED_ORIGINS_CACHE_TTL_MS;
+	} catch (error) {
+		console.error("Failed to load OAuth client origins:", error);
+		// Keep the last known list during a transient database failure. This avoids
+		// breaking already-registered apps while remaining fail-closed for new ones.
+	}
+
+	return registeredOriginsCache;
+}
+
 export const auth = betterAuth({
 	baseURL: appUrl,
 	secret: process.env.BETTER_AUTH_SECRET,
-	database: new Pool({
-		connectionString: process.env.DATABASE_URL,
-	}),
+	database,
 	emailAndPassword: {
 		enabled: false,
 	},
@@ -58,7 +116,7 @@ export const auth = betterAuth({
 		oidcProvider({
 			loginPage: "/login",
 			consentPage: "/consent",
-			trustedClients: parseTrustedClients(),
+			trustedClients,
 			getAdditionalUserInfoClaim: async (user, _scopes, client) => {
 				const globalRole =
 					((user as Record<string, unknown>).role as string | undefined) ??
@@ -112,11 +170,12 @@ export const auth = betterAuth({
 		// (and by server instance) until the cache expires.
 		cookieCache: { enabled: false },
 	},
-	trustedOrigins: [
-		appUrl,
-		"http://localhost:3000",
-		"http://127.0.0.1:3000",
-		...(process.env.ALLOWED_ORIGINS?.split(",").map((s) => s.trim()) || []),
+	// An app becomes trusted when its OAuth client is registered. Its exact
+	// redirect URI is still checked by the OIDC provider; only the origin is
+	// derived here for Better Auth's browser/CORS checks.
+	trustedOrigins: async () => [
+		...configuredOrigins,
+		...(await getRegisteredClientOrigins()),
 	],
 });
 
