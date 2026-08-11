@@ -60,28 +60,16 @@ pnpm install
 
 ### Environment Variables
 
-Create a `.env` file based on `.env.example`:
+Copy `.env.example` to `.env.local`, then set your device's Vault connection:
 
 ```env
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3001
-
-# BetterAuth
-BETTER_AUTH_SECRET=your-secret-here-generate-with-openssl-rand-base64-32
-
-# Database (PostgreSQL)
-DATABASE_URL=postgresql://user:password@localhost:5432/auth
-
-# Google OAuth
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-
-# Optional extra origins (registered OAuth client origins are discovered from the database)
-ALLOWED_ORIGINS=http://localhost:3000
-
-# Trusted Clients (JSON array) - for pre-registered clients that skip consent
-TRUSTED_CLIENTS='[{"clientId":"my-app","clientSecret":"secret","name":"My App","redirectUrls":["http://localhost:3000/api/auth/callback/auth"]}]'
+VAULT_ADDR=https://vault.example.com
+VAULT_TOKEN=your-local-vault-token
+VAULT_SECRET_PATH=secret/auth-local
 ```
+
+`pnpm dev` loads the application settings from Vault and starts central auth at
+`http://localhost:3200`. Vault is authoritative over fallback app settings.
 
 ### Database Setup
 

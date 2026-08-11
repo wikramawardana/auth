@@ -129,7 +129,9 @@ async function loadVaultSecrets() {
 
 	let count = 0;
 	for (const [key, value] of Object.entries(secrets)) {
-		if (typeof value === "string" && !process.env[key]) {
+		// Vault is authoritative for application settings. Keep only the
+		// device-specific Vault connection controls from the local environment.
+		if (typeof value === "string" && !key.startsWith("VAULT_")) {
 			process.env[key] = value;
 			count++;
 		}
@@ -160,7 +162,7 @@ const child = spawn(cmd, args, {
 	stdio: "inherit",
 	env: process.env,
 	cwd: projectRoot,
-	shell: true,
+	shell: false,
 });
 
 child.on("exit", (code) => {
