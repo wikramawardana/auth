@@ -26,8 +26,10 @@
  * Prerequisite: target DBs exist with the better-auth core schema applied
  * (pg_dump --schema-only of the core tables from the central DB).
  */
-const dns = require("node:dns");
-const { Pool } = require("pg");
+import dns from "node:dns";
+import pg from "pg";
+
+const { Pool } = pg;
 
 dns.setDefaultResultOrder("ipv4first");
 
