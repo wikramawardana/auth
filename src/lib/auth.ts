@@ -69,6 +69,9 @@ const configuredOrigins = uniqueOrigins([
 	appUrl,
 	"http://localhost:3000",
 	"http://127.0.0.1:3000",
+	"https://*.wikra.my.id",
+	"https://wikra.my.id",
+	"http://*.wikra.my.id",
 	...(process.env.ALLOWED_ORIGINS?.split(",").map((s) =>
 		getUrlOrigin(s.trim()),
 	) || []),
