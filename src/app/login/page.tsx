@@ -51,10 +51,33 @@ function LoginForm() {
 	const oidcState = searchParams.get("state");
 	const isOidcFlow = !!(clientId && oidcState);
 	const resumedCallback = searchParams.get("oidcCallback");
+	const rawRedirect =
+		resumedCallback ||
+		searchParams.get("callbackUrl") ||
+		searchParams.get("redirect_to") ||
+		searchParams.get("redirectTo");
 
-	const callbackUrl = isOidcFlow
-		? `/api/auth/oauth2/authorize?${searchParams.toString()}`
-		: resumedCallback || searchParams.get("callbackUrl") || "/dashboard";
+	let callbackUrl = "/dashboard";
+	if (isOidcFlow) {
+		callbackUrl = `/api/auth/oauth2/authorize?${searchParams.toString()}`;
+	} else if (rawRedirect) {
+		try {
+			if (rawRedirect.startsWith("/")) {
+				callbackUrl = rawRedirect;
+			} else {
+				const parsed = new URL(rawRedirect);
+				if (
+					parsed.hostname.endsWith("wikra.my.id") ||
+					parsed.hostname === "localhost" ||
+					parsed.hostname === "127.0.0.1"
+				) {
+					callbackUrl = rawRedirect;
+				}
+			}
+		} catch {
+			callbackUrl = "/dashboard";
+		}
+	}
 
 	const triggerGoogleSignIn = React.useCallback(async () => {
 		setIsLoading(true);

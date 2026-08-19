@@ -7,6 +7,9 @@ import { getUserRoleForClient } from "./app-roles";
 dns.setDefaultResultOrder("ipv4first");
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const cookieDomain =
+	process.env.COOKIE_DOMAIN ||
+	(appUrl.includes("wikra.my.id") ? ".wikra.my.id" : undefined);
 const database = new Pool({
 	connectionString: process.env.DATABASE_URL,
 });
@@ -169,6 +172,12 @@ export const auth = betterAuth({
 		// keeps an old copy of user.role and makes role changes differ by device
 		// (and by server instance) until the cache expires.
 		cookieCache: { enabled: false },
+	},
+	advanced: {
+		crossSubDomainCookies: {
+			enabled: Boolean(cookieDomain),
+			domain: cookieDomain,
+		},
 	},
 	// An app becomes trusted when its OAuth client is registered. Its exact
 	// redirect URI is still checked by the OIDC provider; only the origin is
