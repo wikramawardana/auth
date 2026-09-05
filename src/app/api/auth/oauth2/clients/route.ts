@@ -14,9 +14,24 @@ export async function GET() {
 	}
 
 	try {
-		const result = await pool.query(
-			'SELECT * FROM "oauthApplication" ORDER BY "createdAt" DESC',
-		);
+		const result = await pool.query(`
+			SELECT 
+				app.*,
+				COALESCE(counts.users_count, 0)::int as "usersCount"
+			FROM "oauthApplication" app
+			LEFT JOIN (
+				SELECT "clientId", COUNT(DISTINCT "userId") as users_count
+				FROM (
+					SELECT "clientId", "userId" FROM "oauthConsent"
+					UNION
+					SELECT "clientId", "userId" FROM "user_client_role"
+					UNION
+					SELECT "clientId", "userId" FROM "oauthAccessToken"
+				) combined
+				GROUP BY "clientId"
+			) counts ON app."clientId" = counts."clientId"
+			ORDER BY app."createdAt" DESC
+		`);
 		return NextResponse.json(result.rows);
 	} catch {
 		return NextResponse.json([]);

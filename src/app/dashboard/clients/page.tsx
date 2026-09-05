@@ -9,7 +9,9 @@ import {
 	Plus,
 	ShieldCheck,
 	Trash2,
+	Users,
 } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ManageClientRolesDialog } from "@/components/dashboard/manage-client-roles-dialog";
@@ -52,6 +54,7 @@ interface OAuthClient {
 	type: string;
 	disabled: boolean;
 	createdAt: string;
+	usersCount?: number;
 }
 
 interface NewClientForm {
@@ -285,6 +288,14 @@ export default function ClientsPage() {
 												</div>
 											</div>
 											<div className="flex items-center gap-2">
+												<Link
+													href={`/dashboard/users?app=${encodeURIComponent(client.clientId)}`}
+													className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-yellow-300 hover:bg-yellow-400 text-black border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] neo-brutal-hover"
+													title="View users belonging to this application"
+												>
+													<Users className="h-3.5 w-3.5" />
+													<span>{client.usersCount ?? 0} Users</span>
+												</Link>
 												<Badge
 													className={
 														client.disabled

@@ -1,7 +1,8 @@
-import { AppWindow, Monitor, Shield, Users } from "lucide-react";
+import { AppWindow, ArrowRight, Monitor, Shield, Users } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { Pool } from "pg";
+import { Badge } from "@/components/ui/badge";
 import {
 	Card,
 	CardContent,
@@ -9,6 +10,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { getAppStats } from "@/lib/app-stats";
 import { auth } from "@/lib/auth";
 
 const pool = new Pool({
@@ -48,7 +50,7 @@ async function getStats() {
 }
 
 export default async function DashboardPage() {
-	const stats = await getStats();
+	const [stats, appStats] = await Promise.all([getStats(), getAppStats()]);
 
 	return (
 		<Card className="neo-brutal neo-brutal-white">
@@ -128,6 +130,92 @@ export default async function DashboardPage() {
 						</CardContent>
 					</Card>
 				</div>
+
+				{/* Users per Application Section */}
+				<Card className="neo-brutal neo-brutal-white">
+					<CardHeader className="flex flex-row items-center justify-between pb-3">
+						<div>
+							<CardTitle className="text-xl font-black text-black">
+								Users per Application
+							</CardTitle>
+							<CardDescription className="font-medium text-black/60">
+								Active account distribution across all connected apps
+							</CardDescription>
+						</div>
+						<Link
+							href="/dashboard/clients"
+							className="inline-flex items-center gap-1 text-xs font-black uppercase text-blue-600 hover:underline"
+						>
+							Manage Apps <ArrowRight className="h-3.5 w-3.5" />
+						</Link>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						{appStats.apps.length === 0 ? (
+							<div className="py-6 text-center text-sm font-medium text-black/50">
+								No OAuth applications registered yet.
+							</div>
+						) : (
+							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+								{appStats.apps.map((app) => (
+									<div
+										key={app.clientId}
+										className="border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_#000] flex flex-col justify-between"
+									>
+										<div>
+											<div className="flex items-center justify-between gap-2 mb-2">
+												<div className="flex items-center gap-2 min-w-0">
+													<div className="flex h-7 w-7 shrink-0 items-center justify-center bg-blue-100 border border-black">
+														<AppWindow className="h-4 w-4 text-blue-700" />
+													</div>
+													<h3 className="font-black text-sm text-black truncate">
+														{app.name}
+													</h3>
+												</div>
+												<Badge
+													className={
+														app.disabled
+															? "bg-red-200 text-black border border-black text-[10px] px-1.5 py-0 font-bold shrink-0"
+															: "bg-green-200 text-black border border-black text-[10px] px-1.5 py-0 font-bold shrink-0"
+													}
+												>
+													{app.disabled ? "Off" : "Active"}
+												</Badge>
+											</div>
+
+											<div className="my-3">
+												<div className="flex items-baseline justify-between">
+													<span className="text-2xl font-black text-black">
+														{app.usersCount}
+													</span>
+													<span className="text-xs font-bold text-black/50">
+														{app.percentage}% of users
+													</span>
+												</div>
+												<div className="w-full bg-slate-100 border border-black h-2.5 mt-1.5 overflow-hidden">
+													<div
+														className="bg-blue-600 h-full transition-all duration-300"
+														style={{
+															width: `${Math.max(app.percentage, app.usersCount > 0 ? 6 : 0)}%`,
+														}}
+													/>
+												</div>
+											</div>
+										</div>
+
+										<Link
+											href={`/dashboard/users?app=${encodeURIComponent(app.clientId)}`}
+											className="mt-2 inline-flex items-center justify-center gap-1.5 w-full py-1.5 bg-yellow-300 hover:bg-yellow-400 text-black border-2 border-black text-xs font-black uppercase shadow-[2px_2px_0px_0px_#000] transition active:translate-x-0.5 active:translate-y-0.5"
+										>
+											<Users className="h-3.5 w-3.5" />
+											View {app.usersCount} User
+											{app.usersCount !== 1 ? "s" : ""}
+										</Link>
+									</div>
+								))}
+							</div>
+						)}
+					</CardContent>
+				</Card>
 
 				<div className="grid gap-4 md:grid-cols-2">
 					<Link href="/dashboard/sessions" className="block">
