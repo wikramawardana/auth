@@ -110,6 +110,7 @@ function SessionsContent() {
 	}, [searchParams]);
 
 	// Reset display limit when filter/search changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset limit when filters change
 	useEffect(() => {
 		setDisplayLimit(50);
 	}, [selectedApp, search]);
@@ -428,7 +429,8 @@ function SessionsContent() {
 					<div>
 						<h3 className="font-black text-black mb-1">All Sessions</h3>
 						<p className="text-sm font-medium text-black/50 mb-4">
-							{filteredSessions.length} session{filteredSessions.length !== 1 ? "s" : ""} found
+							{filteredSessions.length} session
+							{filteredSessions.length !== 1 ? "s" : ""} found
 							{filteredSessions.length !== sessions.length && (
 								<span> (filtered from {sessions.length} total)</span>
 							)}
@@ -570,7 +572,8 @@ function SessionsContent() {
 											onClick={() => setDisplayLimit((prev) => prev + 50)}
 											className="border-2 border-black font-black text-xs h-9 px-4 bg-white shadow-[2px_2px_0px_0px_#000] hover:bg-slate-100"
 										>
-											Load More Sessions ({filteredSessions.length - displayLimit} remaining)
+											Load More Sessions (
+											{filteredSessions.length - displayLimit} remaining)
 										</Button>
 										<Button
 											variant="ghost"
