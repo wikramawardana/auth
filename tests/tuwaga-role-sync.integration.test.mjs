@@ -116,6 +116,7 @@ test("role sync changes only the authenticated Tuwaga client's assignment", {
 	assert.equal(
 		(await put("tuwaga-sync-test", "integration-secret", body)).status,
 		200,
+		`Role synchronization failed:\n${logs}`,
 	);
 	const global = await pool.query('SELECT role FROM "user" WHERE id = $1', [
 		"reviewer",

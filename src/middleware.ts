@@ -53,6 +53,12 @@ export async function middleware(request: NextRequest) {
 	const startedAt = Date.now();
 	const { pathname } = request.nextUrl;
 
+	// This endpoint authenticates the calling OAuth client in its handler.
+	// Browser-session redirects would prevent server-to-server role sync.
+	if (pathname === "/api/internal/tuwaga-roles") {
+		return logRequest(request, NextResponse.next(), startedAt, "client_auth");
+	}
+
 	if (isPublicRoute(pathname)) {
 		return logRequest(request, NextResponse.next(), startedAt, "public");
 	}
