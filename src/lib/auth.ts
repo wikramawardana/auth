@@ -120,6 +120,8 @@ export const auth = betterAuth({
 	plugins: [
 		jwt(),
 		oidcProvider({
+			// The restricted app-role sync endpoint verifies this storage format.
+			storeClientSecret: "plain",
 			loginPage: "/login",
 			consentPage: "/consent",
 			trustedClients,

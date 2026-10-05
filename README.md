@@ -28,6 +28,7 @@ Auth is the central identity provider powering all applications in this ecosyste
 - **OAuth2 Client Management** -- Register, configure, and manage client applications via UI or env vars
 - **Google OAuth Integration** -- Social login with Google as an identity provider
 - **Role-Based Access Control** -- Define and assign granular roles per client application
+- **Tuwaga EO Role Sync** -- Restricted app-role synchronization for external player reviewers; see [the setup guide](docs/tuwaga-eo-roles.md)
 - **Trusted Client Configuration** -- Pre-register clients via environment variables to skip consent
 - **Multi-Stage Docker Build** -- Optimized production image with standalone output
 
